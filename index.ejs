@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <title>
+      Image Upload to the firebase Store
+   </title>
+   <!-- Favicon -->
+   <link href="assets/img/brand/favicon.png" rel="icon" type="image/png">
+   <!-- Fonts -->
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+   <!-- Icons -->
+   <link href="assets/js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
+   <link href="assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+   <!-- CSS Files -->
+   <link href="assets/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
+</head>
+
+<body class="">
+
+   <div class="main-content">
+      <!-- Header -->
+      <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+         <div class="container-fluid">
+            <div class="header-body">
+               <!-- Card stats -->
+
+            </div>
+         </div>
+      </div>
+      <div class="container-fluid mt--7">
+         <div class="row">
+            <div class="col-xl-8 mb-5 mb-xl-0 offset-xl-2">
+               <div class="card shadow">
+                  <div class="card-header border-0">
+                     <div class="row align-items-center">
+                        <div class="col">
+                           <h3 class="mb-0">Lists</h3>
+                        </div>
+                        <div class="col text-right">
+                           <button type="button" class="btn btn-info" data-toggle="modal"
+                              data-target="#exampleModal">Image Upload</button>
+                           <button type="button" class="btn btn-primary" data-toggle="modal"
+                              data-target="#videoModal">Video Upload</button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="table-responsive">
+                     <!-- Projects table -->
+                     <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                           <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Longitude</th>
+                              <th scope="col">Latitude</th>
+                              <th scope="col">Preview</th>
+                              <th scope="col">URL</th>
+                              <th scope="col">Other</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <% for(var i=0; i < returnData.length; i ++) { %>
+                              <tr>
+                                 <th scope="row">
+                                    <%= i + 1 %>
+                                 </th>
+                                 <th scope="row">
+                                    <%= returnData[i].data().name%>
+                                 </th>
+                                 <td>
+                                    <%= returnData[i].data().position.longitude%>
+                                 </td>
+                                 <td>
+                                    <%= returnData[i].data().position.latitude%>
+                                 </td>
+                                 <td>
+                                    <img src="<%= returnData[i].data().filePath%>" width="100%" />
+                                 </td>
+                                 <td>
+                                    <a href="/download/?id=<%= returnData[i].id %>" target="_blank">
+                                       <%= returnData[i].data().url%>
+                                    </a>
+                                 </td>
+                                 <td>
+                                    <!-- <a href="/download/?id=<%= returnData[i].id %>" class="btn btn-sm btn-primary text-white">Download</a> -->
+                                    <a href="/delete/?id=<%= returnData[i].id %>"
+                                       class="btn btn-sm btn-danger text-white">Delete</a>
+                                 </td>
+                              </tr>
+                              <% } %>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- Footer -->
+         <footer class="footer">
+            <div class="row align-items-center justify-content-xl-between">
+               <div class="col-xl-6 offset-xl-3">
+                  <div class="copyright text-center text-xl-center text-muted">
+                     &copy; 2021 <a href="#" class="font-weight-bold ml-1">Upload image to the firebase store</a>
+                  </div>
+               </div>
+            </div>
+         </footer>
+      </div>
+   </div>
+
+   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+         <form action="/upload" method="POST">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Upload Image</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label for="example-text-input" class="form-control-label">Type</label>
+                           <select name="type" class="form-control">
+                              <option>---Choose the Type---</option>
+                              <option value="firebase">Firebase Storage</option>
+                              <option value="dropbox">Dropbox</option>
+                              <option value="cloudinary">Cloudinary</option>
+                           </select>
+                        </div>
+                        <div class="form-group">
+                           <label for="example-text-input" class="form-control-label">Name</label>
+                           <input class="form-control" type="text" value="Enter the name" name="name">
+                        </div>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="example-search-input" class="form-control-label">Longitude</label>
+                                 <input class="form-control" type="search" placeholder="Tell me your location"
+                                    name="longitude">
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="example-search-input" class="form-control-label">Latitude</label>
+                                 <input class="form-control" type="search" placeholder="Tell me your location"
+                                    name="latitude">
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <input type="hidden" name="filePath" id="filePath" />
+                                 <input type="file" class="form-control" lang="en" id="file" />
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <img src="assets/img/theme/download.png" width="100%" id="preview">
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Confirm</button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+
+
+   <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+         <form action="/upload" method="POST">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Upload Image</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label for="example-text-input" class="form-control-label">Type</label>
+                           <select name="type" class="form-control">
+                              <option>---Choose the Type---</option>
+                              <option value="firebase">Firebase Storage</option>
+                              <option value="dropbox">Dropbox</option>
+                              <option value="cloudinary">Cloudinary</option>
+                           </select>
+                        </div>
+                        <div class="form-group">
+                           <label for="example-text-input" class="form-control-label">Name</label>
+                           <input class="form-control" type="text" value="Enter the name" name="name">
+                        </div>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="example-search-input" class="form-control-label">Longitude</label>
+                                 <input class="form-control" type="search" placeholder="Tell me your location"
+                                    name="longitude">
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="example-search-input" class="form-control-label">Latitude</label>
+                                 <input class="form-control" type="search" placeholder="Tell me your location"
+                                    name="latitude">
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="form-group">
+                                 <label for="example-search-input" class="form-control-label">Video file</label>
+                                 <input type="hidden" name="filePath" id="videofilePath" />
+                                 <input type="file" class="form-control" lang="en" id="videofile" />
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Confirm</button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+
+   <!--   Core   -->
+   <script src="./assets/js/plugins/jquery/dist/jquery.min.js"></script>
+   <script src="./assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+   <!--   Optional JS   -->
+   <script src="./assets/js/plugins/chart.js/dist/Chart.min.js"></script>
+   <script src="./assets/js/plugins/chart.js/dist/Chart.extension.js"></script>
+   <!--   Argon JS   -->
+   <script src="./assets/js/argon-dashboard.min.js?v=1.1.0"></script>
+   <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+   <script>
+      window.TrackJS &&
+         TrackJS.install({
+            token: "ee6fab19c5a04ac1a32a645abde4613a",
+            application: "argon-dashboard-free"
+         });
+
+      $(function () {
+         $('#file').change(function () {
+            var file = $(this)[0].files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajax({
+               type: 'POST',
+               url: '/uploadimage',
+               data: formData,
+               dataType: 'json',
+               contentType: false,
+               processData: false,
+               success: function (data) {
+                  $("#preview").attr('src', data);
+                  $("#filePath").val(data);
+               }
+            })
+         })
+
+         $('#videofile').change(function () {
+            var file = $(this)[0].files[0];
+            var formData = new FormData();
+            formData.append('videofile', file);
+            $.ajax({
+               type: 'POST',
+               url: '/uploadimage',
+               data: formData,
+               dataType: 'json',
+               contentType: false,
+               processData: false,
+               success: function (data) {
+                  $("#videofilePath").val(data);
+               }
+            })
+         })
+      })
+
+   </script>
+</body>
+
+</html>
