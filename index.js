@@ -24,6 +24,8 @@ app.use(bodyParser.urlencoded({ extend: true }));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 app.set('views', __dirname);
+const dirPath = path.join(__dirname, '/dir');
+
 
 
 const dropbox = dropboxV2Api.authenticate({
@@ -36,10 +38,13 @@ app.get('/', async function (req, res) {
    result.forEach(doc => {
       returnData.push(doc);
    });
-   fs.readdir(dir, (err, files) => {
-      if (!fs.existsSync(dir)){
-         fs.mkdirSync(dir);
+   if (!fs.existsSync(dirPath)){
+         fs.mkdirSync(dirPath);
       }
+      
+   console.log(__dirname) 
+      
+   fs.readdir(dir, (err, files) => {
       if (err) throw err;
       for (const file of files) {
          fs.unlink(path.join("uploads", file), err => {
