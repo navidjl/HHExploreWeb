@@ -38,12 +38,6 @@ app.get('/', async function (req, res) {
    result.forEach(doc => {
       returnData.push(doc);
    });
-   if (!fs.existsSync(dirPath)){
-         fs.mkdirSync(dirPath);
-      }
-      
-   console.log(__dirname) 
-      
    fs.readdir(dir, (err, files) => {
       if (err) throw err;
       for (const file of files) {
