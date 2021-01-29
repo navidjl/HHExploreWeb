@@ -15,6 +15,7 @@ const cloudinary = require('cloudinary').v2;
 var http = require('http');
 
 const dropboxKey = '2qfT4TJU3QkAAAAAAAAAAWg3p69q5nHyIYmuYt4LhCyBWcxOyFgvST1VzwLGoSsw'
+const dir = './uploads'
 // const token = "QhueogHcQrIAAAAAAAAAAclDBWW7EiLD9-rMklQ6uKUKYE1CPw5SaYNX8znZOe3U"
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.static('public'));
@@ -35,14 +36,17 @@ app.get('/', async function (req, res) {
    result.forEach(doc => {
       returnData.push(doc);
    });
-   // fs.readdir("uploads", (err, files) => {
-   //    if (err) throw err;
-   //    for (const file of files) {
-   //       fs.unlink(path.join("uploads", file), err => {
-   //          if (err) throw err;
-   //       });
-   //    }
-   // });
+   fs.readdir(dir, (err, files) => {
+      if (!fs.existsSync(dir)){
+         fs.mkdirSync(dir);
+      }
+      if (err) throw err;
+      for (const file of files) {
+         fs.unlink(path.join("uploads", file), err => {
+            if (err) throw err;
+         });
+      }
+   });
    res.render("index.ejs", { good: "title", returnData: returnData });
 })
 
